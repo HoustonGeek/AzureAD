@@ -12,12 +12,10 @@
     Written by: ALI TAJRAN
     Website:    alitajran.com
     LinkedIn:   linkedin.com/in/alitajran
-    Modified by: Michael Stringer Jr
-    Modified website: www.mkstringer.com
 
     .CHANGELOG
     V1.00, 04/24/2023 - Initial version
-    4-25-2023 - Add OU to output (OU=,DC=), and User logon name field to Export CSV and added a unique password
+    4-25-2023 - Add OU to output (OU=,DC=), and User logon name field
 #>
 
 # Define the CSV file location and import the data
@@ -63,7 +61,6 @@ foreach ($User in $Users) {
         Write-Warning "User '$SamAccountName' already exists in Active Directory."
         continue
     }
-    
     #Create a unique password
     $Password = "P@ssw0rd1234"+$GivenName.substring(0,1)+$Surname.substring(0,1)
 
@@ -103,7 +100,7 @@ foreach ($User in $Users) {
     try {
         # Create the new AD user
         New-ADUser @NewUserParams
-        Write-Host "User $SamAccountName created successfully." -ForegroundColor Cyan
+        Write-Host "User $SamAccountName created successfully with password $Password." -ForegroundColor Cyan
     }
     catch {
         # Failed to create the new AD user
