@@ -1,2 +1,2 @@
 # AzureAD
-A variation of the script from Ali Tajran
+A variation of the scripts from Ali Tajran
