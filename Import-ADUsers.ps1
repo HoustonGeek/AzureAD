@@ -12,13 +12,16 @@
     Written by: ALI TAJRAN
     Website:    alitajran.com
     LinkedIn:   linkedin.com/in/alitajran
+    Modified by: Michael Stringer Jr
+    Modified website: www.mkstringer.com
 
     .CHANGELOG
     V1.00, 04/24/2023 - Initial version
+    4-25-2023 - Add OU to output (OU=,DC=), and User logon name field to Export CSV and added a unique password
 #>
 
 # Define the CSV file location and import the data
-$Csvfile = "C:\scripts\AllADUsers_202304240919.csv"
+$Csvfile = "C:\scripts\NewADUsers_202304240913.csv"
 $Users = Import-Csv $Csvfile
 
 # Import the Active Directory module
@@ -60,6 +63,9 @@ foreach ($User in $Users) {
         Write-Warning "User '$SamAccountName' already exists in Active Directory."
         continue
     }
+    
+    #Create a unique password
+    $Password = "P@ssw0rd1234"+$GivenName.substring(0,1)+$Surname.substring(0,1)
 
     # Create new user parameters
     $NewUserParams = @{
@@ -84,7 +90,7 @@ foreach ($User in $Users) {
         OfficePhone           = $TelephoneNumber
         EmailAddress          = $Email
         MobilePhone           = $Mobile
-        AccountPassword       = (ConvertTo-SecureString "P@ssw0rd1234" -AsPlainText -Force)
+        AccountPassword       = (ConvertTo-SecureString $Password -AsPlainText -Force)
         Enabled               = if ($AccountStatus -eq "Enabled") { $true } else { $false }
         ChangePasswordAtLogon = $true # Set the "User must change password at next logon" flag
     }
